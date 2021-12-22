@@ -49,11 +49,18 @@ app.get('/weather', (req, res) => {
     }
     request({ url: 'http://api.weatherapi.com/v1/current.json?key=8056099077e04ec9931234212211212&q=' + req.query.address + '&aqi=no', json: true },
         (error, response) => {
-            console.log('It is currently ' + response.body.current.temp_c + ' degress.')
-            res.send({
-                forecast: `It is ${response.body.current.temp_c} degrees`,
-                address: req.query.address,
-            })
+            if (!response.body.error) {
+                console.log('It is currently ' + response.body.current.temp_c + ' degress.')
+                res.send({
+                    forecast: `It is ${response.body.current.temp_c} degrees`,
+                    address: req.query.address,
+                })
+            } else {
+                res.send({
+                    error: 'Address was not provided'
+                })
+            }
+
         })
 
 })
